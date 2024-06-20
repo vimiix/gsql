@@ -1,4 +1,4 @@
-# openGauss 系数据库 gsql 工具容器
+# MogDB/openGauss 系数据库工具集容器
 
 ## 支持的工具
 
@@ -6,24 +6,40 @@
 
 ## 支持的平台
 
-- `arm64`
-- `amd64`
+- `linux/arm64`
+- `linux/amd64`
 
 ## 使用方式
 
-- gsql (默认)
+### gsql (默认)
+
+- Linux
 
 ```bash
-alias gsql="docker run --rm -it vimiix/gsql"
+alias gsql="docker run --rm -it --net host vimiix/gsql"
 gsql -h<IP> -p<PORT> -U<USER> -d<DBNAME>
 ```
 
-如果要使用其他工具可直接追加命令调用
+- Windows
 
-```bash
-docker run --rm -it vimiix/gsql gs_dump ...
+```Powershell
+# 打开 $PROFILE 文件，不存在需要先创建
+notepad.exe $PROFILE
+
+# 然后在文件中添加如下函数
+function gsql {
+    param (
+        [string[]]$args
+    )
+    & "docker" run --rm -it --net host vimiix/gsql $args
+}
+# 保存即可直接通过 gsql 使用
+
+gsql -h<IP> -p<PORT> -U<USER> -d<DBNAME>
 ```
 
-## 说明
+如果要使用其他工具可在镜像名后追加具体的工具名称调用
 
-- 镜像名称就叫 `gsql`，不想改
+```bash
+docker run --rm -it --net host vimiix/gsql gs_dump
+```
